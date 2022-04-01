@@ -39,6 +39,11 @@ def Json_Folder_Exist():
         return False
 
 
+
+
+
+# zmienna wysyla dane w liscie
+# do skryptu tworzacego klasy 
 data_list = []
 def main():
     
@@ -55,7 +60,8 @@ def main():
     JSON_DATA = LOADER(Full_Path_Json)
     JSON_DATA = pd.DataFrame(JSON_DATA)
 
-    for i in JSON_DATA['DATA']:
+    # tworzenie listy z danymi d otworzenia klas 
+    for i in JSON_DATA['points']:
         data_list.append([i['start'], i['beforek']])
 
 

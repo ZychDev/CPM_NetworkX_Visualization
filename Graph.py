@@ -1,3 +1,4 @@
+from multiprocessing import Value
 import webbrowser
 from pyvis.network import Network
 import pandas as pd
@@ -18,6 +19,18 @@ import urllib
 # nt.from_nx(nx_graph)
 # nt.show('nx.html')
 
+def Time_duration(G, points_list):
+
+    for i,v in enumerate(G.nodes()):
+        G.nodes[v]['state'] = points_list[i].duration
+    
+    pos = nx.spring_layout(G)
+    nx.draw(G,pos)
+    node_labels = nx.get_node_attributes(G,'state')
+    nx.draw_networkx_labels(G, pos, labels = node_labels)
+    return G
+
+
 def Draw_HTML(points_list):
     
     G = nx.Graph()
@@ -34,15 +47,10 @@ def Draw_HTML(points_list):
             G.add_edge(i.activity, i.predecessor)
 
 
-
-
-
-    #nx_graph = nx.Graph()
-    # nx_graph = nx.path_graph()
-    # nx_graph.add_node("Sample")
-    # nx_graph.add_node("Hello")
+    # time label
+    G = Time_duration(G, points_list)
 
 
     nt = Network('1000', '1000px')
     nt.from_nx(G)
-    nt.show('nx.html')
+    nt.show('./HTML/nx.html')

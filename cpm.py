@@ -71,16 +71,19 @@ def cpm(data_list):
 
 
     # add points 
+    for j,i in enumerate(data_list):
+        p = point(i[0], i[1], 1, j)
+        test.add_point(p)
 
-    p1 = point("A", "-", 3, 0)
-    p2 = point("B", "A", 4, 1)
-    p3 = point("C", "A", 2, 2)
-    p4 = point("D", "C", 2, 2)
+    # p1 = point("A", "-", 3, 0)
+    # p2 = point("B", "A", 4, 1)
+    # p3 = point("C", "A", 2, 2)
+    # p4 = point("D", "C", 2, 2)
 
-    test.add_point(p1)
-    test.add_point(p2)
-    test.add_point(p3)
-    test.add_point(p4)
+    # test.add_point(p1)
+    # test.add_point(p2)
+    # test.add_point(p3)
+    # test.add_point(p4)
 
     test.show_tree()
     test.Branch_Solver_Right()
