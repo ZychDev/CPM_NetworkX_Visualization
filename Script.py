@@ -71,8 +71,10 @@ def main():
 
     # tworzenie listy z danymi d otworzenia klas 
     for i in JSON_DATA['points']:
-        data_list.append([i['start'], i['beforek']])
+        data_list.append([i['start'], i['beforek'], i['finish'], i['value']])
 
+
+    print("DATA: ", data_list)
 
     # twqorzenie klas + algorytm 
     cpm(data_list)

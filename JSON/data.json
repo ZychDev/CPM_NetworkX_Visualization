@@ -1,8 +1,18 @@
 {
     "points":[
-    {"beforek":"-","start":"A","finish":"B","value":"1"},
-    {"beforek":"A","start":"B","finish":"C","value":"3"},
-    {"beforek":"B","start":"C","finish":"D","value":"5"}
+    {"beforek":"-","start":"A","finish":"B","value":"3"},
+    {"beforek":"A","start":"B","finish":"C","value":"4"},
+    {"beforek":"A","start":"C","finish":"D","value":"2"},
+    {"beforek":"B","start":"D","finish":"C","value":"5"},
+    {"beforek":"C","start":"E","finish":"C","value":"1"},
+    {"beforek":"C","start":"F","finish":"C","value":"2"},
+    {"beforek":"D","start":"G","finish":"C","value":"4"},
+    {"beforek":"E","start":"G","finish":"C","value":"4"},
+    {"beforek":"F","start":"H","finish":"C","value":"3"},
+    {"beforek":"G","start":"H","finish":"C","value":"3"}
+
+
+
     ]
     
 }
