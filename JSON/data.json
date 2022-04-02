@@ -1,5 +1,5 @@
 {
-    "DATA":[
+    "points":[
     {"beforek":"-","start":"A","finish":"B","value":"1"},
     {"beforek":"A","start":"B","finish":"C","value":"3"},
     {"beforek":"B","start":"C","finish":"D","value":"5"}

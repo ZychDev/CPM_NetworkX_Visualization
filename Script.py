@@ -38,7 +38,14 @@ def Json_Folder_Exist():
     else:
         return False
 
+# sprawdzanie istnienia folderu Json
+# jezeli nie istnieje stworz go
+def Html_Folder_Exist():
 
+    if os.path.exists("./HTML/"):
+        return True
+    else:
+        os.mkdir("./HTML/")
 
 
 
@@ -53,7 +60,9 @@ def main():
     else:
         print("Folder JSON missing")
         quit()
-    
+
+    # tworzenie folderu/sprawdzenie
+    Html_Folder_Exist()
 
     Json_Name = listdir_nohidden(Folder_Path_Json)[0]
     Full_Path_Json = Folder_Path_Json + Json_Name
