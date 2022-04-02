@@ -22,7 +22,7 @@ class point:
         print(f"Point: {self.id}, activity: {self.activity}, predecessor: {self.predecessor}, next: {self.next} ,duration: {self.duration}")
     
     def show_2(self):
-        print(f"Point: {self.activity}, ES: {self.ES}, EF: {self.EF},  duration: {self.duration}")
+        print(f"Point: {self.activity}, ES: {self.ES}, EF: {self.EF}, LS: {self.LS}, LF: {self.LF},  duration: {self.duration}")
 
     def set_ES(self, value):
         self.ES = value
@@ -53,6 +53,8 @@ class tree:
     def __init__(self):
         self.lista_pkt = []
         self.start_point = None
+        self.end_point = None
+
         self.max_points = None
 
 
@@ -76,8 +78,7 @@ class tree:
             if i.activity == activity:
                 return i
 
-    def update_list(self, lista_pkt):
-        self.lista_pkt = lista_pkt
+
 
     # funkcja rozwiacujaca problem brancha w prawa strone
     def Branch_Solver_Right(self):
@@ -123,10 +124,81 @@ class tree:
                 else:
                     continue
 
-                
-        
+        # szukanie najwiekszego czyli ostatniego wyniku
+        maximum = 0
+        for m in self.lista_pkt:
+            if m.get_EF() > maximum:
+                maximum = m.get_EF()
+                self.end_point = m
+            else:
+                continue
+
+        self.end_point.set_LF(maximum)
+        self.end_point.set_LS(maximum - self.end_point.duration)
+        print(self.end_point.show_2())
+
+        # for b in self.lista_pkt:
+        #     b.set_LS(maximum)
+
+
+
+
 
                 
+    def Branch_Solver_Left(self):
+
+        unique_value_back = {}
+        for i in self.lista_pkt:
+            if i.activity not in unique_value_back:
+                unique_value_back[i.activity] = []
+        
+        for j in self.lista_pkt:
+            unique_value_back[j.activity].append(j.predecessor)
+
+
+        print("to moja tabelka: ",unique_value_back)
+
+
+        for key, file_dir in sorted(list(unique_value_back.items()), key=lambda x:x[0].lower(), reverse=True):
+
+            obiekty = unique_value_back[str(key)]
+            main_obj = self.search_list(str(key))
+
+            for z in obiekty:
+                if z == "-":
+                    continue
+
+                tmp = self.search_list(str(z))
+                print(tmp.activity)
+
+                tmp.set_LF(main_obj.get_LS())
+                tmp.set_LS(tmp.get_LF() - tmp.duration)
+ 
+                    
+
+
+
+
+
+        # for i in unique_value_back:
+
+        #     obiekty = unique_value_back[str(i)]
+        #     main_obj = self.search_list(str(i))
+
+            # for z in lista_obiekty:
+                
+            #     tmp = self.search_list(str(z))
+            #     print("obiekty: ", z)
+
+                # if tmp.get_LS() > main_obj.get_LF():
+                #     tmp.set_LS( main_obj.get_LF())
+                #     tmp.set_LF( tmp.get_LS() + tmp.duration )
+                # else:
+                #     continue
+
+
+
+
 
 
 def cpm(data_list):
@@ -152,9 +224,22 @@ def cpm(data_list):
 
     test.show_tree()
     test.Branch_Solver_Right()
+    test.Branch_Solver_Left()
 
-    test.show_tree_2()
+    for z in test.lista_pkt:
+        if z.ES == 0 and z.EF == 0 and z.LS == 0 and z.LF == 0:
+            test.lista_pkt.remove(z)
 
+    CPM_TEST = []
+    for z in test.lista_pkt:
+        if z.EF == z.LF:
+            CPM_TEST.append(z)
+
+    print("new")
+    for m in CPM_TEST:
+        print(m.activity)
+
+    
 
 
 
@@ -165,7 +250,7 @@ def cpm(data_list):
 
 
     print("Draw HTML")
-    Draw_HTML(test.get_list())
+    Draw_HTML(test.get_list(), CPM_TEST)
 
 
 
