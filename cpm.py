@@ -1,6 +1,6 @@
-from Graph import Draw_HTML
+from Graph_copy import Draw_HTML
 
-
+from collections import OrderedDict
 
 
 
@@ -8,9 +8,9 @@ class point:
     
     def __init__(self, activity, predecessor, next, duration, id):
         self.ES = 0
-        self.LS = 0
+        self.LS = 1000
         self.EF = 0
-        self.LF = 0
+        self.LF = 10000
         self.activity = activity
         self.predecessor = predecessor
         self.next = next
@@ -58,6 +58,11 @@ class tree:
         self.max_points = None
 
 
+    def get_start_point(self):
+        return self.start_point
+    
+    def get_end_point(self):
+        return self.end_point
 
     def add_point(self, point):
         self.lista_pkt.append(point)
@@ -125,27 +130,33 @@ class tree:
                     continue
 
         # szukanie najwiekszego czyli ostatniego wyniku
-        maximum = 0
-        for m in self.lista_pkt:
-            if m.get_EF() > maximum:
-                maximum = m.get_EF()
-                self.end_point = m
-            else:
-                continue
+        # maximum = 0
+        # for m in self.lista_pkt:
+        #     if m.get_EF() > maximum:
+        #         maximum = m.get_EF()
+        #         self.end_point = m
+        #     else:
+        #         continue
 
-        self.end_point.set_LF(maximum)
-        self.end_point.set_LS(maximum - self.end_point.duration)
-        print(self.end_point.show_2())
+        # self.end_point.set_LF(maximum)
+        # self.end_point.set_LS(maximum - self.end_point.duration)
+        # print("hhh", self.end_point.show_2())
+        low = 0
+        obiekt = None
+        for zxc in self.lista_pkt:
+            if low < zxc.get_EF():
+                low = zxc.get_EF()
+                obiekt = zxc
+        self.end_point = obiekt
 
-        # for b in self.lista_pkt:
-        #     b.set_LS(maximum)
+        self.end_point.set_LF(low)
+        self.end_point.set_LS(low - self.end_point.duration)
 
-
-
+        return self.end_point
 
 
                 
-    def Branch_Solver_Left(self):
+    def Branch_Solver_Left(self, end_point):
 
         unique_value_back = {}
         for i in self.lista_pkt:
@@ -156,45 +167,64 @@ class tree:
             unique_value_back[j.activity].append(j.predecessor)
 
 
-        print("to moja tabelka: ",unique_value_back)
+
+        unique_value_back = OrderedDict(reversed(list(unique_value_back.items())))
 
 
-        for key, file_dir in sorted(list(unique_value_back.items()), key=lambda x:x[0].lower(), reverse=True):
+        # for i in unique_value_back:
 
-            obiekty = unique_value_back[str(key)]
-            main_obj = self.search_list(str(key))
+        #     print(i)
+        #     obiekty = unique_value_back[str(i)]
+        #     main_obj = self.search_list(str(i))
 
-            for z in obiekty:
-                if z == "-":
-                    continue
 
-                tmp = self.search_list(str(z))
-                print(tmp.activity)
+        #     for z in obiekty:
+        #         if z == "-":
+        #             continue
 
-                tmp.set_LF(main_obj.get_LS())
-                tmp.set_LS(tmp.get_LF() - tmp.duration)
- 
+        #         tmp = self.search_list(str(z))
+        #         print(tmp.activity)
+
+        #         tmp.set_LF(main_obj.get_LS())
+        #         tmp.set_LS(tmp.get_LF() - tmp.duration)
+
                     
 
 
 
 
+        print("--- sprawdzam ---")
+        minim = 0
+        for i in unique_value_back:
 
-        # for i in unique_value_back:
+            obiekty = unique_value_back[str(i)]
+            main_obj = self.search_list(str(i))
+            #print("To jest i: ", i)
+            #print(main_obj.show_2())
 
-        #     obiekty = unique_value_back[str(i)]
-        #     main_obj = self.search_list(str(i))
+            for z in obiekty:
+                print("----")
 
-            # for z in lista_obiekty:
-                
-            #     tmp = self.search_list(str(z))
-            #     print("obiekty: ", z)
+                if z == '-':
+                    continue
+                print(z)
+                print(main_obj.activity)
+                tmp = self.search_list(str(z))
+                print("----")
 
-                # if tmp.get_LS() > main_obj.get_LF():
-                #     tmp.set_LS( main_obj.get_LF())
-                #     tmp.set_LF( tmp.get_LS() + tmp.duration )
-                # else:
-                #     continue
+                print("Wartosci maina: ", main_obj.get_LS())
+                print("Wartosci tmp: ", tmp.get_LF())
+
+                if main_obj.get_LS() < tmp.get_LF():
+                    tmp.set_LF(main_obj.get_LS())
+                    tmp.set_LS( tmp.get_LF() - tmp.duration)
+
+        
+        print("co tu sie")
+        self.start_point.show_2()
+        print("minim", minim)
+        #self.start_point.set_LF(minim)
+        self.start_point.set_LS(self.start_point.get_LF() - self.start_point.duration)
 
 
 
@@ -223,8 +253,10 @@ def cpm(data_list):
     # test.add_point(p4)
 
     test.show_tree()
-    test.Branch_Solver_Right()
-    test.Branch_Solver_Left()
+    end = test.Branch_Solver_Right()
+    test.show_tree_2()
+    test.Branch_Solver_Left(end)
+    test.show_tree_2()
 
     for z in test.lista_pkt:
         if z.ES == 0 and z.EF == 0 and z.LS == 0 and z.LF == 0:
@@ -240,8 +272,7 @@ def cpm(data_list):
         print(m.activity)
 
     
-
-
+    test.show_tree_2()
 
 
 
@@ -250,7 +281,7 @@ def cpm(data_list):
 
 
     print("Draw HTML")
-    Draw_HTML(test.get_list(), CPM_TEST)
+    Draw_HTML(test.get_list(), CPM_TEST, test)
 
 
 
